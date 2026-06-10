@@ -1,0 +1,22 @@
+name: Extract ZIP
+on:
+  push:
+    paths:
+      - '*.zip'
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract ZIP
+        run: |
+          unzip -o nms-ready.zip
+          cp -r nms-merged/* .
+          rm -rf nms-merged nms-ready.zip
+      - name: Commit files
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git add -A
+          git commit -m "Extract project files" || echo "Nothing to commit"
+          git push
